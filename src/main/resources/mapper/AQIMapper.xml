@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.papaya.processaqi.dao.AQIMapper">
+  <select id="QueryexistTable" parameterType="String" resultType="int">
+    select COUNT(1) as count from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='aqidatabase' and TABLE_NAME=#{tableName};
+  </select>
+
+  <insert id="insertSite" parameterType="com.papaya.processaqi.bean.AQISite">
+    insert into SiteInfo (sitenumber, sitename, sitecity,sitelon,sitelat)
+    values (#{aqiSite.sitenumber}, #{aqiSite.sitename}, #{aqiSite.sitecity},#{aqiSite.sitelon}, #{aqiSite.sitelat})
+  </insert>
+
+  <insert id="insertAQIData" parameterType="com.papaya.processaqi.bean.AQIData">
+    replace into AQIData (siteNumber,dateTime, AQI, PM25,PM25_24h, PM10, PM10_24h,SO2,
+    SO2_24h, NO2,NO2_24h, O3,O3_24h, O3_8h, O3_8h_24h,CO,CO_24h)
+    values (#{aqiData.siteNumber},#{aqiData.dateTimeStr}, #{aqiData.AQI}, #{aqiData.PM25},#{aqiData.PM25_24h}, #{aqiData.PM10},
+    #{aqiData.PM10_24h}, #{aqiData.SO2}, #{aqiData.SO2_24h},#{aqiData.NO2},
+    #{aqiData.NO2_24h},#{aqiData.O3}, #{aqiData.O3_24h}, #{aqiData.O3_8h},#{aqiData.O3_8h_24h}, #{aqiData.CO},#{aqiData.CO_24h})
+  </insert>
+
+    <update id="createSiteTable">
+        CREATE TABLE `SiteInfo` (
+      `sitenumber` VARCHAR(20) NOT NULL,
+      `sitename` VARCHAR(50) DEFAULT NULL,
+      `sitecity` VARCHAR(20) DEFAULT NULL,
+      `sitelon` float DEFAULT NULL ,
+      `sitelat` float DEFAULT NULL,
+      PRIMARY KEY (`sitenumber`)
+    ) DEFAULT CHARSET=utf8 ;
+  </update>
+
+    <update id="createAQIDataTable" parameterType="String">
+    CREATE TABLE `AQIData` (
+      `sitenumber` VARCHAR(20) NOT NULL,
+      `dateTime` DATETIME NOT NULL ,
+      `AQI` int DEFAULT NULL,
+      `PM25` int DEFAULT NULL,
+      `PM25_24h` int DEFAULT NULL,
+      `PM10` int DEFAULT NULL,
+      `PM10_24h` int DEFAULT NULL,
+      `SO2` int DEFAULT NULL,
+      `SO2_24h` int DEFAULT NULL,
+      `NO2` int DEFAULT NULL,
+      `NO2_24h` int DEFAULT NULL,
+      `O3` int DEFAULT NULL,
+      `O3_24h` int DEFAULT NULL,
+      `O3_8h` int DEFAULT NULL,
+      `O3_8h_24h` int DEFAULT NULL,
+      `CO` float DEFAULT NULL,
+      `CO_24h` float DEFAULT NULL,
+      PRIMARY KEY (`dateTime`,`sitenumber`)
+    ) DEFAULT CHARSET=utf8 ;
+  </update>
+</mapper>
